@@ -1,0 +1,8 @@
+Good Day and welcome to the automated operating for the "Your Logo" web store.
+
+How would you like to begin?
+
+Log-in: 		To log in, please press (1)
+Account-Creation:	To Create a new account, please press (2)
+
+To quit, please type "quit"
