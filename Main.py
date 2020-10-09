@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib.request
 import re
+from LoginAttempt import insertNameNPassword
 
 #This function searches the Link with the specified text
 
@@ -40,7 +41,8 @@ while bool(acceptableValueChecker):
 
 	#handling based on the input
 	if command == "1":
-    		print(searchLink("Sign in"))
+    		loginLink = searchLink("Sign in")
+    		insertNameNPassword(loginLink)
 	elif command == "2":
     		print(searchLink("Sign in"))
 	elif command == "quit":
