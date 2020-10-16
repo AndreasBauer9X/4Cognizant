@@ -2,7 +2,10 @@ from requests import Session
 from bs4 import BeautifulSoup as bs
 import requests
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
 
 def insertNameNPassword(websiteLink):
 	print("In the following, please insert name and password.\nYou can cancel the login by typing 'quit'.\n")
@@ -13,7 +16,7 @@ def insertNameNPassword(websiteLink):
 
 		payload = {}
 	
-		un = input("\nPlease type ypur E-Mail address:  ")
+		un = input("\nPlease type your E-Mail address:  ")
 
 		if un == "quit":
 			checker = 0
@@ -31,14 +34,27 @@ def insertNameNPassword(websiteLink):
 
 		
 		if bool(checker):
-                        DRIVER_PATH = "/usr/share/man/man1"
-			driver = webdriver.Safari(executable_path=DRIVER_PATH)
-			driver.implicitly_wait(10)
-			driver.get("http://automationpractice.com/index.php?controller=authentication")
-			driver.find_element_by_id("email").clear()
-			driver.find_element_by_id("email").send_keys(payload.get("email"))
-			driver.find_element_by_id ("passwd").clear()
-			driver.find_element_by_id ("passwd").send_keys(payload.get("passwd"))
-			loginBut = driver.find_element_by_id("SubmitLogin")
-			loginBut.send_keys("\n")
-			
+                        
+                        text = 'Authentication failed'
+
+                        browser = webdriver.Safari()
+                        browser.get(('http://automationpractice.com/index.php?controller=authentication'))
+
+                        username = browser.find_element_by_id('email')
+                        username.send_keys(payload.get("email"))
+
+                        password = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.ID, 'passwd')))
+                        password.send_keys(payload.get("passwd"))
+ 
+                        signInButton = WebDriverWait(browser, 20).until(EC.presence_of_element_located((By.ID,'SubmitLogin')))
+
+
+                        browser.execute_script("arguments[0].click();", signInButton)
+                        print("Please wait a couple of seconds. Your login is being verified...!")
+                        time.sleep(7)
+
+                        if (text in browser.page_source):
+                                print("I'm sorry, but your login failed due to a wrong E-mail address or password.\nPlease try again!")
+                                browser.quit()
+                        else:
+                                print("Your login was successful!")

@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import re
 from LoginAttempt import insertNameNPassword
+from CreateAccount import askForUserData
 
 #This function searches the Link with the specified text
 
@@ -44,7 +45,8 @@ while bool(acceptableValueChecker):
     		loginLink = searchLink("Sign in")
     		insertNameNPassword(loginLink)
 	elif command == "2":
-    		print(searchLink("Sign in"))
+    		loginLink = searchLink("Sign in")
+    		askForUserData(loginLink)
 	elif command == "quit":
 		#Since the User requested to quit, the loop will be terminated
 		acceptableValueChecker = 0
